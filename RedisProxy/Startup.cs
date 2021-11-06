@@ -12,7 +12,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace RedisProxy {
+
     public class Startup {
+
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
         }
@@ -37,7 +39,7 @@ namespace RedisProxy {
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(name: "default", pattern: "{controller=RedisProxy}/{action=GetFromCache}/{CacheKey}");
             });
         }
     }
