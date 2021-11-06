@@ -1,20 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RedisProxy.Controllers {
 
-    public class RedisProxyController {
-        private readonly ILogger<RedisProxyController> _logger;
+    [Route("proxy/")]
+    [ApiController]
+    public class RedisProxyController : ControllerBase {
+        private readonly Dictionary<string, string> _localCache;
 
-        private readonly Dictionary<string, object> _localCache;
+        public RedisProxyController(Dictionary<string, string> dict) {
+            _localCache = dict;
+        }
 
-        public RedisProxyController(ILogger<RedisProxyController> logger) {
-            _logger = logger;
-            _localCache = new Dictionary<string, object>();
+        [HttpGet("{key}")]
+        public string GetFromCache(string key) {
+            var output = _localCache.TryGetValue(key, out var cacheRet);
+
+            if (!output) {
+                return null;
+            }
+            return cacheRet;
         }
 
         [HttpGet]
@@ -22,5 +29,4 @@ namespace RedisProxy.Controllers {
             throw new NotImplementedException();
         }
     }
-}
 }
