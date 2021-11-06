@@ -17,6 +17,9 @@ namespace RedisProxy {
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureAppConfiguration(configure => {
+                    configure.AddJsonFile("appsettings.json");
                 });
     }
 }

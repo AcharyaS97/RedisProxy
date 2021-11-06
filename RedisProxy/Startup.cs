@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RedisProxy.Properties;
 
 namespace RedisProxy {
 
@@ -31,6 +32,14 @@ namespace RedisProxy {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
+
+            var globalExpiry = Configuration.GetValue<int>(StartupArgs.key_GlobalExpiry);
+            var redisHostName = Configuration.GetValue<string>(StartupArgs.key_HostName);
+            var maxCapacity = Configuration.GetValue<int>(StartupArgs.key_MaxSize);
+
+            Console.WriteLine($"{StartupArgs.key_GlobalExpiry}: {globalExpiry}");
+            Console.WriteLine($"{StartupArgs.key_HostName}: {redisHostName}");
+            Console.WriteLine($"{StartupArgs.key_MaxSize}: {maxCapacity}");
 
             app.UseHttpsRedirection();
 
