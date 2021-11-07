@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using RedisProxy.Services;
 using System.Collections.Generic;
 
 namespace RedisProxy.Controllers {
@@ -8,25 +9,19 @@ namespace RedisProxy.Controllers {
     [Route("proxy/")]
     [ApiController]
     public class RedisProxyController : ControllerBase {
-        private readonly Dictionary<string, string> _localCache;
+        private readonly ILocalCache _localCache;
 
-        public RedisProxyController(Dictionary<string, string> dict) {
+        public RedisProxyController(ILocalCache dict) {
             _localCache = dict;
         }
 
         [HttpGet("{key}")]
         public string GetFromCache(string key) {
-            var output = _localCache.TryGetValue(key, out var cacheRet);
-
-            if (!output) {
+            var ret = _localCache.GetKey(key, out var cacheRet);
+            if (!ret) {
                 return null;
             }
             return cacheRet;
-        }
-
-        [HttpGet]
-        public string Get(string key) {
-            throw new NotImplementedException();
         }
     }
 }
