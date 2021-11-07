@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RedisProxy.Properties;
+using RedisProxy.Services;
 
 namespace RedisProxy {
 
@@ -24,6 +25,13 @@ namespace RedisProxy {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+            var globalExpiry = Configuration.GetValue<int>(StartupArgs.key_GlobalExpiry);
+            var redisHostName = Configuration.GetValue<string>(StartupArgs.key_HostName);
+            var maxCapacity = Configuration.GetValue<int>(StartupArgs.key_MaxSize);
+
+            Console.WriteLine($"{StartupArgs.key_GlobalExpiry}: {globalExpiry}");
+            Console.WriteLine($"{StartupArgs.key_HostName}: {redisHostName}");
+            Console.WriteLine($"{StartupArgs.key_MaxSize}: {maxCapacity}");
             services.AddControllers();
         }
 
@@ -32,14 +40,6 @@ namespace RedisProxy {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
-
-            var globalExpiry = Configuration.GetValue<int>(StartupArgs.key_GlobalExpiry);
-            var redisHostName = Configuration.GetValue<string>(StartupArgs.key_HostName);
-            var maxCapacity = Configuration.GetValue<int>(StartupArgs.key_MaxSize);
-
-            Console.WriteLine($"{StartupArgs.key_GlobalExpiry}: {globalExpiry}");
-            Console.WriteLine($"{StartupArgs.key_HostName}: {redisHostName}");
-            Console.WriteLine($"{StartupArgs.key_MaxSize}: {maxCapacity}");
 
             app.UseHttpsRedirection();
 
