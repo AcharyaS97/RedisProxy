@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using RedisProxy.Controllers;
+using RedisProxy.Services;
 using Xunit;
 
 namespace ProxyTests {
@@ -8,9 +9,16 @@ namespace ProxyTests {
     public class RedisProxyControllerTest {
         private readonly RedisProxyController _controller;
 
+        private readonly RedisConnection _connection;
+
+        private readonly LRUCache _localCache;
+
         public RedisProxyControllerTest() {
-            var testCache = SetupLocalTestData();
-            _controller = new RedisProxyController(testCache);
+            _connection = new RedisConnection(GetConnectionString());
+            _localCache = new LRUCache(100);
+            SetupLocalTestData();
+
+            _controller = new RedisProxyController(_localCache, _connection);
         }
 
         [Fact]
@@ -25,11 +33,13 @@ namespace ProxyTests {
             Assert.Null(getResult);
         }
 
-        private Dictionary<string, string> SetupLocalTestData() {
-            var cache = new Dictionary<string, string>();
-            cache.Add("Key1", "hello");
-            cache.Add("Key2", "hello2");
-            return cache;
+        private void SetupLocalTestData() {
+            _localCache.AddOrUpdateKey("Key1", "Val1");
+            _localCache.AddOrUpdateKey("Key2", "Val2");
+        }
+
+        private string GetConnectionString() {
+            return "rescale-test-saheel.redis.cache.windows.net:6380,password=E1PdLmEqmQ4BNPktVwfF5zd3Cv0fxzLq1AzCaLPCEPo=,ssl=True,abortConnect=False";
         }
     }
 }

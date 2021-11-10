@@ -32,7 +32,7 @@ namespace RedisProxy {
             Console.WriteLine($"{StartupArgs.key_GlobalExpiry}: {globalExpiry}");
             Console.WriteLine($"{StartupArgs.key_HostName}: {redisHostName}");
             Console.WriteLine($"{StartupArgs.key_MaxSize}: {maxCapacity}");
-            services.AddSingleton<ILocalCache, LRUCache>(x => new LRUCache(maxCapacity));
+            services.AddSingleton<ILocalCache, LRUCache>(x => new LRUCache(maxCapacity, globalExpiry, x));
             services.AddSingleton<ICacheConnection, RedisConnection>(x => new RedisConnection(redisHostName));
             services.AddControllers();
         }

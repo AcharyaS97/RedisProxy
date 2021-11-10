@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="BitFaster.Caching" Version="1.0.4" />
+    <PackageReference Include="ConcurrentPriorityQueue" Version="1.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
     <PackageReference Include="StackExchange.Redis" Version="2.2.79" />
   </ItemGroup>
